@@ -3,8 +3,8 @@ namespace StyleBookBarberBD.Models
 {
     public class Barberos
     {
-        public int BarberoId { get; set; }
-        public int UsuarioId { get; set; }
+        public int BarberosId { get; set; }
+        public int UsuariosId { get; set; }
         public string Especialidad { get; set; } = string.Empty;
         public string FotoUrl { get; set; } = string.Empty;
         public decimal Calificacion { get; set; }

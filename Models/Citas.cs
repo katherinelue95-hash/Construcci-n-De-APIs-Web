@@ -1,18 +1,21 @@
 ﻿// Models/Cita.cs
+using System.ComponentModel.DataAnnotations;
+
 namespace StyleBookBarberBD.Models
 {
     public class Citas
     {
-        public int CitaId { get; set; }
+        [Key]
+        public int CitasId { get; set; }
         public int ClienteId { get; set; }
-        public int BarberoId { get; set; }
-        public int ServicioId { get; set; }
+        public int BarberosId { get; set; }
+        public int ServiciosId { get; set; }
         public DateTime FechaHora { get; set; }
         public decimal MontoTotal { get; set; }
         public string Estado { get; set; } = "Pendiente";
         public Usuarios? Cliente { get; set; }
-        public Barberos? Barbero { get; set; }
-        public Servicios? Servicio { get; set; }
+        public Barberos? Barberos { get; set; }
+        public Servicios? Servicios { get; set; }
     }
 }
 

@@ -1,10 +1,13 @@
 ﻿// Models/HorarioBarbero.cs
+using System.ComponentModel.DataAnnotations;
+
 namespace StyleBookBarberBD.Models
 {
     public class HorariosBarbero
     {
-        public int HorarioId { get; set; }
-        public int BarberoId { get; set; }
+        [Key]
+        public int HorariosId { get; set; }
+        public int BarberosId { get; set; }
         public int DiaSemana { get; set; }
         public TimeSpan HoraInicio { get; set; }
         public TimeSpan HoraFin { get; set; }

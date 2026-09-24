@@ -7,12 +7,12 @@ using StyleBookBarberBD.Models;
 
 namespace StyleBookBarberBD.Services
 {
-    public class HorariosBarberoService
+    public class HorariosBarberoServices
     {
         private readonly StyleBookBarberBDContext _context;
         private readonly IMapper _mapper;
 
-        public HorariosBarberoService(StyleBookBarberBDContext context, IMapper mapper)
+        public HorariosBarberoServices(StyleBookBarberBDContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
