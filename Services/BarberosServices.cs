@@ -29,7 +29,7 @@ namespace StyleBookBarberBD.Services
         public async Task<BarberosDTos?> GetBarberoByIdAsync(int id)
         {
             var barbero = await _context.Barberos.Include(b => b.Usuario)
-                                                 .FirstOrDefaultAsync(b => b.BarberoId == id);
+                                                 .FirstOrDefaultAsync(b => b.BarberosId == id);
             return barbero != null ? _mapper.Map<BarberosDTos>(barbero) : null;
         }
 
@@ -46,10 +46,19 @@ namespace StyleBookBarberBD.Services
         public async Task<BarberosDTos?> ActualizarBarberoAsync(int id, BarberosDTos dto)
         {
             var barbero = await _context.Barberos.FindAsync(id);
-            if (barbero == null) return null;
 
-            _mapper.Map(dto, barbero);
+            if (barbero == null)
+                return null;
+
+            // No modificar la llave primaria
+            barbero.UsuariosId = dto.UsuarioId;
+            barbero.Especialidad = dto.Especialidad;
+            barbero.FotoUrl = dto.FotoUrl;
+            barbero.Calificacion = dto.Calificacion;
+            barbero.EstadoDisp = dto.EstadoDisp;
+
             await _context.SaveChangesAsync();
+
             return _mapper.Map<BarberosDTos>(barbero);
         }
 

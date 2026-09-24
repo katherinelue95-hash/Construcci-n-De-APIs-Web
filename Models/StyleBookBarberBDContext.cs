@@ -15,6 +15,7 @@ namespace StyleBookBarberBD.Data
         public DbSet<HorariosBarbero> HorariosBarbero { get; set; }
         public DbSet<Servicios> Servicios { get; set; }
         public DbSet<Citas> Citas { get; set; }
+        public DbSet<Resenas> Resenas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,7 +23,7 @@ namespace StyleBookBarberBD.Data
 
             // Restricción de colisión de citas (BarberoId + FechaHora)
             modelBuilder.Entity<Citas>()
-                .HasIndex(c => new { c.BarberoId, c.FechaHora })
+                .HasIndex(c => new { c.BarberosId, c.FechaHora })
                 .IsUnique()
                 .HasDatabaseName("UQ_Citas_Barbero_FechaHora");
 
@@ -34,15 +35,27 @@ namespace StyleBookBarberBD.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Citas>()
-                .HasOne(c => c.Barbero)
+                .HasOne(c => c.Barberos)
                 .WithMany()
-                .HasForeignKey(c => c.BarberoId)
+                .HasForeignKey(c => c.BarberosId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Citas>()
-                .HasOne(c => c.Servicio)
+                .HasOne(c => c.Servicios)
                 .WithMany()
-                .HasForeignKey(c => c.ServicioId)
+                .HasForeignKey(c => c.ServiciosId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Resenas>()
+                .HasOne(r => r.Barberos)
+                .WithMany()
+                .HasForeignKey(r => r.BarberosId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Resenas>()
+                .HasOne(r => r.Usuario)
+                .WithMany()
+                .HasForeignKey(r => r.UsuariosId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

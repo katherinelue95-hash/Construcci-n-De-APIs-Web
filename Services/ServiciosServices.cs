@@ -29,7 +29,7 @@ namespace StyleBookBarberBD.Services
         public async Task<ServiciosDTos?> GetServicioByIdAsync(int id)
         {
             var servicio = await _context.Servicios.Include(s => s.Categoria)
-                                                   .FirstOrDefaultAsync(s => s.ServicioId == id);
+                                                   .FirstOrDefaultAsync(s => s.ServiciosId == id);
             return servicio != null ? _mapper.Map<ServiciosDTos>(servicio) : null;
         }
 
@@ -48,8 +48,14 @@ namespace StyleBookBarberBD.Services
             var servicio = await _context.Servicios.FindAsync(id);
             if (servicio == null) return null;
 
-            _mapper.Map(dto, servicio);
+            servicio.CategoriaId = dto.CategoriaId;
+            servicio.NombreServicio = dto.NombreServicio;
+            servicio.Precio = dto.Precio;
+            servicio.DuracionMin = dto.DuracionMin;
+            servicio.FotoUrl = dto.FotoUrl;
+
             await _context.SaveChangesAsync();
+
             return _mapper.Map<ServiciosDTos>(servicio);
         }
 
