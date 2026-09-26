@@ -22,7 +22,7 @@ namespace StyleBookBarberBD.Services
         {
             var citas = await _context.Citas
                 .Include(c => c.Cliente)
-                .Include(c => c.Barberos)
+                .Include(c => c.Barberos)!.ThenInclude(b => b.Usuario)
                 .Include(c => c.Servicios)
                 .ToListAsync();
 
@@ -33,7 +33,7 @@ namespace StyleBookBarberBD.Services
         {
             var cita = await _context.Citas
                 .Include(c => c.Cliente)
-                .Include(c => c.Barberos)
+                .Include(c => c.Barberos)!.ThenInclude(b => b.Usuario)
                 .Include(c => c.Servicios)
                 .FirstOrDefaultAsync(c => c.CitasId == id);
 

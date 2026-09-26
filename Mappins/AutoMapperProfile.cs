@@ -31,9 +31,11 @@ namespace StyleBookBarberBD.Mappings
 
             // 🔹 Barberos
             CreateMap<Barberos, BarberosDTos>()
-                .ForMember(dest => dest.NombreCompleto, opt => opt.MapFrom(src => $"{src.Usuario!.Nombre} {src.Usuario!.Apellido}"))
-                .ForMember(dest => dest.Correo, opt => opt.MapFrom(src => src.Usuario!.Correo))
-                .ReverseMap();
+                .ForMember(dest => dest.UsuarioId, opt => opt.MapFrom(src => src.UsuariosId))
+                .ForMember(dest => dest.NombreCompleto, opt => opt.MapFrom(src => src.Usuario != null ? $"{src.Usuario.Nombre} {src.Usuario.Apellido}".Trim() : string.Empty))
+                .ForMember(dest => dest.Correo, opt => opt.MapFrom(src => src.Usuario != null ? src.Usuario.Correo : string.Empty));
+            CreateMap<BarberosDTos, Barberos>()
+                .ForMember(dest => dest.UsuariosId, opt => opt.MapFrom(src => src.UsuarioId));
             CreateMap<Categorias, CategoriasDTos>()
                 .ReverseMap();
             // 🔹 Reseñas
@@ -44,9 +46,9 @@ namespace StyleBookBarberBD.Mappings
 
             // Roles
             CreateMap<Roles, RolesDTos>()
-                .ReverseMap();
-            CreateMap<HorariosBarbero, HorariosBarberoDTos>()
-                .ReverseMap();
+                .ForMember(dest => dest.RolesId, opt => opt.MapFrom(src => src.RolId));
+            CreateMap<RolesDTos, Roles>()
+                .ForMember(dest => dest.RolId, opt => opt.MapFrom(src => src.RolesId));
         }
     }
 }

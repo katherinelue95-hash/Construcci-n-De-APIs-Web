@@ -34,20 +34,35 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// 🔹 Swagger (habilitado en todos los entornos: RunASP.NET sirve la app en Production)
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // 🔹 Middleware
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseHttpsRedirection();
+
+// 🔹 Raíz: evita HTTP 404 en https://stylebookbarber-api.runasp.net/ y apunta a Swagger
+app.MapGet("/", () => Results.Redirect("/swagger"));
+
+// 🔹 Diagnóstico: estado del servidor y conexión real a la base de datos remota
+app.MapGet("/health", () => Results.Ok(new { status = "ok", time = DateTimeOffset.UtcNow }));
+
+app.MapGet("/health/db", async (StyleBookBarberBDContext db, ILogger<Program> logger) =>
+{
+    try
+    {
+        var connected = await db.Database.CanConnectAsync();
+        if (connected)
+            return Results.Ok(new { database = "connected" });
+
+        return Results.Ok(new { database = "no-connection", reason = "CanConnectAsync devolvió false" });
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "No se pudo conectar con la base de datos remota.");
+        return Results.Ok(new { database = "error", detail = ex.Message, inner = ex.InnerException?.Message });
+    }
+});
 
 // 🔹 Archivos estáticos (fotos subidas por el panel administrativo)
 app.UseStaticFiles();
